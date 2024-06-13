@@ -2,7 +2,7 @@ import React from 'react'
 
 const CardItem = () => {
   return (
-    <div className='card card-compact bg-base-100 shadow-xl w-40 p-1'>
+    <div className='card card-compact bg-base-100 shadow-xl flex p-1'>
         <div className='card-body'>
             <h2 className='card-title text-info-content mx-auto underline underline-offset-8'>Pork Chop</h2>
             <div>Id:</div>

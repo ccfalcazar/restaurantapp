@@ -6,9 +6,6 @@ const Header = () => {
     <div className="mt-auto">
       <h1 className="text-2xl font-sans text-base-100 p-3 ">Restaurant Menu</h1>
     </div>
-    <div className="ms-auto mt-auto mb-auto p-2">
-      <button className="btn md:btn-sm">Add Food</button>
-    </div>
   </div>
   )
 }
