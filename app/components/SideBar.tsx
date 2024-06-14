@@ -7,6 +7,13 @@ const SideBar = () => {
         setCount(Count + 1);
     }
 
+    function RemoveDiv(e:any)
+    {
+        Count -1;
+        const divElement = document.getElementById('div'+e.target.id);
+        divElement?.remove();
+    }
+
   return (
     <>
     <label htmlFor='add-item-drawer' className='drawer-overlay'></label>
@@ -31,9 +38,9 @@ const SideBar = () => {
                     {
                         Array.from(Array(Count)).map((key,index)=>{
                             return (
-                                        <div key={"div"+index} className='flex'>
+                                        <div id={'div'+index} key={"div"+index} className='flex'>
                                             <input key={"input"+index} className='input input-sm input-bordered mt-1'/>
-                                            <button key={"btn"+index} className='btn btn-outline border-0 btn-circle btn-error btn-sm my-auto text-md' onClick={()=>{Count -1;}}>X</button>
+                                            <button id={index.toString()} key={"btn"+index} className='btn btn-outline border-0 btn-circle btn-error btn-sm my-auto text-md' onClick={RemoveDiv}>X</button>
                                         </div>
                             )
                         })                    
@@ -52,6 +59,7 @@ const SideBar = () => {
             </div>
             <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
         </label>
+        <button className='btn btn-primary mt-5 me-4 btn-sm'>Submit</button>
     </div>
     </>
   )
