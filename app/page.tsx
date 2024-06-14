@@ -1,8 +1,5 @@
-import CardItem from "./components/CardItem";
-import Category from "./components/Category";
-import ContentTable from "./components/ContentTable";
 import Header from "./components/Header";
-import Controls from "./components/Controls";
+import Drawer from "./components/Drawer";
 
 export default function Home() {
   return (
@@ -10,8 +7,7 @@ export default function Home() {
     <div className="mx-auto md:w-4/5 shadow-lg min-h-screen rounded-t-md">
         <Header/>
       <div className="min-h-screen mb-5">
-        <Controls />
-        <ContentTable />
+        <Drawer/>
       </div> 
       <div className="bg-primary text-base-100 p-2 md:rounded-b-md">
             <p>Created by: Christian Carlo Alcazar</p>

@@ -4,7 +4,7 @@ const ContentTable = () => {
   return (
     <div className='overflow-x-auto mx-3'>
         <table className='table table-zebra'>
-            <thead>
+            <thead className='bg-primary text-primary-content'>
             <tr>
                 <th>
                     Category
@@ -24,6 +24,8 @@ const ContentTable = () => {
                 <th>
                     Stocks
                 </th>
+                <th>
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -32,7 +34,7 @@ const ContentTable = () => {
                     Starters
                 </td>
                 <td>
-                    Buffalo Wings
+                    Chicken Cordon Bleu
                 </td>
                 <td>
                     None
@@ -45,6 +47,9 @@ const ContentTable = () => {
                 </td>
                 <td>
                     100
+                </td>
+                <td>
+                    <button className='btn btn-outline btn-xs btn-success'>Edit</button>
                 </td>
             </tr>
             <tr>
@@ -65,6 +70,9 @@ const ContentTable = () => {
                 </td>
                 <td>
                     100
+                </td>
+                <td>
+                    <button className='btn btn-outline btn-xs btn-success'>Edit</button>
                 </td>
             </tr>
             </tbody>
