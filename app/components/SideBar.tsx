@@ -1,7 +1,30 @@
 import React, { useEffect, useState } from 'react'
+import Variation from './Variation';
 
 const SideBar = () => {
-    const [Count, setCount] = useState(0);
+
+    const InitialVariation = {
+        id: String,
+        name: String,
+        cost: Number,
+        price: Number,
+        stock: Number
+    }
+
+    const [Count, setCount] = useState(1);
+    const [Category, setCategory] = useState();
+    const [Name, setName] = useState();
+    const [Variations, setVariations] = useState({} as any);
+    const [Cost, setCost] = useState();
+    const [Price, setPrice] = useState();
+    const [Stocks, setStock] = useState();
+
+    function HandlesVariationOnChange(e:any)
+    {
+        const temp = {} as any;
+        temp[e.target.id] = e.target.value;
+        setVariations({...Variations, ...temp});
+    }
 
     function AddVariation(){
         setCount(Count + 1);
@@ -10,8 +33,12 @@ const SideBar = () => {
     function RemoveDiv(e:any)
     {
         Count -1;
-        const divElement = document.getElementById('div'+e.target.id);
-        divElement?.remove();
+        let temp = {} as any;
+        const InputID = 'input'+e.target.id;
+        temp[InputID] = null;
+        setVariations({...Variations, ...temp});
+        const VariationElement = document.getElementById('div'+e.target.id);
+        VariationElement?.remove();
     }
 
   return (
@@ -38,28 +65,34 @@ const SideBar = () => {
                     {
                         Array.from(Array(Count)).map((key,index)=>{
                             return (
-                                        <div id={'div'+index} key={"div"+index} className='flex'>
-                                            <input key={"input"+index} className='input input-sm input-bordered mt-1'/>
+                                        <div id={'div'+index} key={"div"+index}>
+                                        <div className='label'>
+                                        <span className="label-text text-sm">Name</span>
+                                        </div>
+                                        <div className='flex'>
+                                            <input key={"input"+index} id={'input'+index} className='input input-sm input-bordered mt-1' onChange={HandlesVariationOnChange}/>
                                             <button id={index.toString()} key={"btn"+index} className='btn btn-outline border-0 btn-circle btn-error btn-sm my-auto text-md' onClick={RemoveDiv}>X</button>
+                                        </div>
+                                        <div className='label'>
+                                        <span className="label-text text-sm">Cost</span>
+                                        </div>
+                                        <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
+                                        <div className='label'>
+                                            <span className="label-text text-sm">Price</span>
+                                        </div>
+                                        <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
+                                        <div className='label'>
+                                            <span className="label-text text-sm">Stocks</span>
+                                        </div>
+                                        <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
                                         </div>
                             )
                         })                    
                     }
                  </div>
-            <div className='label'>
-                <span className="label-text text-sm">Cost</span>
-            </div>
-            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
-            <div className='label'>
-                <span className="label-text text-sm">Price</span>
-            </div>
-            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
-            <div className='label'>
-                <span className="label-text text-sm">Stocks</span>
-            </div>
-            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
+
         </label>
-        <button className='btn btn-primary mt-5 me-4 btn-sm'>Submit</button>
+        <button className='btn btn-primary mt-5 me-4 btn-sm' onClick={()=>alert(Variations['input2'] )}>Submit</button>
     </div>
     </>
   )
