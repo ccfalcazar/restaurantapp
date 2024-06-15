@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { app } from './../firebase-config'
 import { getDatabase, push, ref, set} from 'firebase/database';
+import Variation from './Variation';
 
 const SideBar = () => {
 
     const [Count, setCount] = useState(1);
     const [Category, setCategory] = useState('');
     const [Name, setName] = useState('');
-    const [Variations, setVariations] = useState({} as any);
-    const [Cost, setCost] = useState({} as any);
-    const [Price, setPrice] = useState({} as any);
-    const [Stocks, setStock] = useState({} as any);
+    const [ListVariation, setVariations] = useState(['default']);
+    const [ListCost, setCost] = useState([0]);
+    const [ListPrice, setPrice] = useState([0]);
+    const [ListStocks, setStock] = useState([0]);
 
     function HandlesCategoryOnChange(e:any)
     {
@@ -22,29 +23,25 @@ const SideBar = () => {
         setName(e.target.value);
     }
 
-    function HandlesVariationOnChange(e:any)
+    function OnChangeVariation(e:any)
     {
-        const temp = {} as any;
-        temp[e.target.id] = e.target.value;
-        setVariations({...Variations, ...temp});
+        setVariations([ListVariation[Count], e.target.value]);
     }
-    function HandlesCostOnChange(e:any)
+    function OnChangeCost(e:any)
     {
-        const temp = {} as any;
-        temp[e.target.id] = e.target.value;
-        setCost({...Cost, ...temp});
+        setCost([ListCost[Count], e.target.value]);
     }
-    function HandlesPriceOnChange(e:any)
+    function OnChangePrice(e:any)
     {
         const temp = {} as any;
         temp[e.target.id] = e.target.value;
-        setPrice({...Price, ...temp});
+        setPrice([ListPrice[Count], e.target.value]);
     }
-    function HandlesStockOnChange(e:any)
+    function OnChangeStock(e:any)
     {
         const temp = {} as any;
         temp[e.target.id] = e.target.value;
-        setStock({...Stocks, ...temp});
+        setStock([ListStocks[Count], e.target.value]);
     }
 
     function AddVariation(){
@@ -54,22 +51,27 @@ const SideBar = () => {
     function RemoveDiv(e:any)
     {
         Count -1;
-        let temp = {} as any;
-        const InputID = 'name'+e.target.id;
-        temp[InputID] = undefined;
-        setVariations({...Variations, ...temp});
-        const VariationElement = document.getElementById('div'+e.target.id);
-        VariationElement?.remove();
+        const id = e.target.id;
+        let Element = document.getElementById('div'+e.target.id);
+        Element?.remove();
+        Element = document.getElementById('name'+id);
+        Element?.remove();
+        Element = document.getElementById('cost'+id);
+        Element?.remove();
+        Element = document.getElementById('price'+id);
+        Element?.remove();
+        Element = document.getElementById('stock'+id);
+        Element?.remove();
+        Element = document.getElementById(id);
+        Element?.remove();
+        
     }
 
     const HandlesOnSubmit = async() =>
     {
-        const db = getDatabase(app);
-        const path = 'menuitems/'+Category+'/'+Name+'/';
-        for(let index=0;index < Variations.Count; index++)
-            {
-                alert(Variations);
-            }
+        alert(ListVariation[0]);
+        //const db = getDatabase(app);
+        //const path = 'menuitems/'+Category+'/'+Name+'/';
         //push(ref(db,path),{
             //name: Name
         //});
@@ -99,15 +101,8 @@ const SideBar = () => {
                     {
                         Array.from(Array(Count)).map((arr,index)=>{
                             return (
-                                        <div key={"div"+index} id={'div'+index} className='border-2 border-dashed border-base-100 p-3 my-2'>
-                                            <input key={"name"+index} id={'name'+index} className='input input-sm input-bordered w-full my-2' placeholder='Name' onChange={HandlesVariationOnChange}/>
-                                            <input key={'cost'+index} id={'cost'+index} type='number' className='input input-sm input-bordered w-full my-2' placeholder='Cost' onChange={HandlesCostOnChange}/>
-                                            <input key={'price'+index} id={'price'+index} type='numer' className='input input-sm input-bordered w-full my-2' placeholder='Price' onChange={HandlesPriceOnChange}/>
-                                            <input key={'stock'+index} id={'stock'+index} type='numer' className='input input-sm input-bordered w-full my-2' placeholder='Stocks' onChange={HandlesStockOnChange} />
-                                        <button key={"btn"+index} id={index.toString()} className='btn btn-outline btn-error btn-sm mt-3 size-full' onClick={RemoveDiv}>Remove</button>
-                                        </div>
-                            )
-                        })                    
+                            <Variation key={index} index={index} HandlesVariationOnChange={OnChangeVariation} HandlesCostOnChange={OnChangeCost} HandlesPriceOnChange={OnChangePrice} HandlesStockOnChange={OnChangeStock} RemoveDiv={RemoveDiv} />
+                            )})                    
                     }
                  </div>
 
