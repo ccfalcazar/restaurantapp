@@ -1,29 +1,50 @@
 import React, { useEffect, useState } from 'react'
-import Variation from './Variation';
+import { app } from './../firebase-config'
+import { getDatabase, push, ref, set} from 'firebase/database';
 
 const SideBar = () => {
 
-    const InitialVariation = {
-        id: String,
-        name: String,
-        cost: Number,
-        price: Number,
-        stock: Number
+    const [Count, setCount] = useState(1);
+    const [Category, setCategory] = useState('');
+    const [Name, setName] = useState('');
+    const [Variations, setVariations] = useState({} as any);
+    const [Cost, setCost] = useState({} as any);
+    const [Price, setPrice] = useState({} as any);
+    const [Stocks, setStock] = useState({} as any);
+
+    function HandlesCategoryOnChange(e:any)
+    {
+        setCategory(e.target.value);
     }
 
-    const [Count, setCount] = useState(1);
-    const [Category, setCategory] = useState();
-    const [Name, setName] = useState();
-    const [Variations, setVariations] = useState({} as any);
-    const [Cost, setCost] = useState();
-    const [Price, setPrice] = useState();
-    const [Stocks, setStock] = useState();
+    function HandlesNameOnChange(e:any)
+    {
+        setName(e.target.value);
+    }
 
     function HandlesVariationOnChange(e:any)
     {
         const temp = {} as any;
         temp[e.target.id] = e.target.value;
         setVariations({...Variations, ...temp});
+    }
+    function HandlesCostOnChange(e:any)
+    {
+        const temp = {} as any;
+        temp[e.target.id] = e.target.value;
+        setCost({...Cost, ...temp});
+    }
+    function HandlesPriceOnChange(e:any)
+    {
+        const temp = {} as any;
+        temp[e.target.id] = e.target.value;
+        setPrice({...Price, ...temp});
+    }
+    function HandlesStockOnChange(e:any)
+    {
+        const temp = {} as any;
+        temp[e.target.id] = e.target.value;
+        setStock({...Stocks, ...temp});
     }
 
     function AddVariation(){
@@ -34,11 +55,24 @@ const SideBar = () => {
     {
         Count -1;
         let temp = {} as any;
-        const InputID = 'input'+e.target.id;
-        temp[InputID] = null;
+        const InputID = 'name'+e.target.id;
+        temp[InputID] = undefined;
         setVariations({...Variations, ...temp});
         const VariationElement = document.getElementById('div'+e.target.id);
         VariationElement?.remove();
+    }
+
+    const HandlesOnSubmit = async() =>
+    {
+        const db = getDatabase(app);
+        const path = 'menuitems/'+Category+'/'+Name+'/';
+        for(let index=0;index < Variations.Count; index++)
+            {
+                alert(Variations);
+            }
+        //push(ref(db,path),{
+            //name: Name
+        //});
     }
 
   return (
@@ -50,11 +84,11 @@ const SideBar = () => {
             <div className='label'>
                 <span className="label-text text-sm">Category</span>
             </div>
-            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
+            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' onChange={HandlesCategoryOnChange}/>
             <div className='label'>
                 <span className="label-text text-sm">Name</span>
             </div>
-            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
+            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' onChange={HandlesNameOnChange}/>
             <div className='flex mt-5'>
                  <label className='my-auto me-1'>Variations</label>
                  <button className='btn btn-sm border-0 btn-outline btn-success' onClick={AddVariation}>
@@ -63,28 +97,14 @@ const SideBar = () => {
             </div>
             <div className=''>
                     {
-                        Array.from(Array(Count)).map((key,index)=>{
+                        Array.from(Array(Count)).map((arr,index)=>{
                             return (
-                                        <div id={'div'+index} key={"div"+index}>
-                                        <div className='label'>
-                                        <span className="label-text text-sm">Name</span>
-                                        </div>
-                                        <div className='flex'>
-                                            <input key={"input"+index} id={'input'+index} className='input input-sm input-bordered mt-1' onChange={HandlesVariationOnChange}/>
-                                            <button id={index.toString()} key={"btn"+index} className='btn btn-outline border-0 btn-circle btn-error btn-sm my-auto text-md' onClick={RemoveDiv}>X</button>
-                                        </div>
-                                        <div className='label'>
-                                        <span className="label-text text-sm">Cost</span>
-                                        </div>
-                                        <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
-                                        <div className='label'>
-                                            <span className="label-text text-sm">Price</span>
-                                        </div>
-                                        <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
-                                        <div className='label'>
-                                            <span className="label-text text-sm">Stocks</span>
-                                        </div>
-                                        <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' />
+                                        <div key={"div"+index} id={'div'+index} className='border-2 border-dashed border-base-100 p-3 my-2'>
+                                            <input key={"name"+index} id={'name'+index} className='input input-sm input-bordered w-full my-2' placeholder='Name' onChange={HandlesVariationOnChange}/>
+                                            <input key={'cost'+index} id={'cost'+index} type='number' className='input input-sm input-bordered w-full my-2' placeholder='Cost' onChange={HandlesCostOnChange}/>
+                                            <input key={'price'+index} id={'price'+index} type='numer' className='input input-sm input-bordered w-full my-2' placeholder='Price' onChange={HandlesPriceOnChange}/>
+                                            <input key={'stock'+index} id={'stock'+index} type='numer' className='input input-sm input-bordered w-full my-2' placeholder='Stocks' onChange={HandlesStockOnChange} />
+                                        <button key={"btn"+index} id={index.toString()} className='btn btn-outline btn-error btn-sm mt-3 size-full' onClick={RemoveDiv}>Remove</button>
                                         </div>
                             )
                         })                    
@@ -92,7 +112,7 @@ const SideBar = () => {
                  </div>
 
         </label>
-        <button className='btn btn-primary mt-5 me-4 btn-sm' onClick={()=>alert(Variations['input2'] )}>Submit</button>
+        <button className='btn btn-primary mt-5 me-4 btn-sm' onClick={HandlesOnSubmit}>Submit</button>
     </div>
     </>
   )
