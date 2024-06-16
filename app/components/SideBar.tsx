@@ -12,14 +12,9 @@ const SideBar = () => {
         price: 0,
         stock: 0
     }
-    const [ListOptions, SetOptions] = useState([Options]);
+    const [ListOptions, setOptions] = useState([Options]);
     const [Category, setCategory] = useState('');
     const [Name, setName] = useState('');
-    const [ListVarName, setVariations] = useState(['default']);
-    const [ListCost, setCost] = useState([0]);
-    const [ListPrice, setPrice] = useState([0]);
-    const [ListStocks, setStock] = useState([0]);
-
     function AddOptions()
     {    
         const temp = {
@@ -29,7 +24,7 @@ const SideBar = () => {
             price: 0,
             stock: 0
         }
-        SetOptions([...ListOptions,temp]);
+        setOptions([...ListOptions,temp]);
     }
 
     function HandlesCategoryOnChange(e:any)
@@ -44,49 +39,77 @@ const SideBar = () => {
 
     function OnChangeVariation(e:any)
     {
-        //setVariations([ListVarName[Count], e.target.value]);
+        let [ElementName, ElementId] = e.target.id.split('-');
+        setOptions(ListOptions.map(option =>{
+            if (option.id == ElementId){
+                return {...option, name: e.target.value}
+            }
+            else {
+                return option
+            }
+        }))
     }
     function OnChangeCost(e:any)
     {
-        //setCost([ListCost[Count], e.target.value]);
+        let [ElementName, ElementId] = e.target.id.split('-');
+        setOptions(ListOptions.map(option =>{
+            if (option.id == ElementId){
+                return {...option, cost: e.target.value}
+            }
+            else {
+                return option
+            }
+        }))
     }
     function OnChangePrice(e:any)
     {
-        const temp = {} as any;
-        temp[e.target.id] = e.target.value;
-        //setPrice([ListPrice[Count], e.target.value]);
+        let [ElementName, ElementId] = e.target.id.split('-');
+        setOptions(ListOptions.map(option =>{
+            if (option.id == ElementId){
+                return {...option, price: e.target.value}
+            }
+            else {
+                return option
+            }
+        }))
     }
     function OnChangeStock(e:any)
     {
-        const temp = {} as any;
-        temp[e.target.id] = e.target.value;
-        //setStock([ListStocks[Count], e.target.value]);
+        let [ElementName, ElementId] = e.target.id.split('-');
+        setOptions(ListOptions.map(option =>{
+            if (option.id == ElementId){
+                return {...option, stock: e.target.value}
+            }
+            else {
+                return option
+            }
+        }))
     }
 
     function RemoveDiv(e:any)
     {
-        const ElementId = e.target.id;
-        console.log('id'+ElementId);
-        const Variants = ListOptions.filter(Opt => Opt.id !== ElementId);
-        console.log(Variants);
-        SetOptions(Variants);
-        //const id = e.target.id;        
+        const Variants = ListOptions.filter(Opt => Opt.id != e.target.id);
+        setOptions(Variants);   
     }
 
     const HandlesOnSubmit = async() =>
     {
-        ListOptions.map((option)=>{console.log(option.id)});
-        //const db = getDatabase(app);
-        //const path = 'menuitems/'+Category+'/'+Name+'/';
-        //push(ref(db,path),{
-            //name: Name
-        //});
+        const db = getDatabase(app);
+        const path = 'menuitems/'+Category+'/'+Name+'/';
+        ListOptions.map((option)=>{
+            set(ref(db,path+option.name),{
+                cost: option.cost,
+                price: option.price,
+                stocks: option.stock
+            });
+        });
+        
     }
 
   return (
     <>
     <label htmlFor='add-item-drawer' className='drawer-overlay'></label>
-    <div className="menu p-4 w-80 min-h-full bg-base-300 text-base-content">
+    <div className="menu p-4 min-h-full w-fit bg-base-300 text-base-content">
         <p className='font-bold text-lg text-center'>Food Information</p>
         <label className='form-control pe-4'>
             <div className='label'>
@@ -108,13 +131,13 @@ const SideBar = () => {
                         ListOptions.map((options,index)=>{
                             options.id = index;
                             return (
-                                <Variation key={index} index={index} HandlesVariationOnChange={OnChangeVariation} HandlesCostOnChange={OnChangeCost} HandlesPriceOnChange={OnChangePrice} HandlesStockOnChange={OnChangeStock} RemoveDiv={RemoveDiv} />
+                                <Variation key={index} Name={options.name} Cost={options.cost} Price={options.price} Stocks={options.stock} index={index} HandlesVariationOnChange={OnChangeVariation} HandlesCostOnChange={OnChangeCost} HandlesPriceOnChange={OnChangePrice} HandlesStockOnChange={OnChangeStock} RemoveDiv={RemoveDiv} />
                             )})                 
                     }
                  </div>
 
         </label>
-        <button className='btn btn-primary mt-5 me-4 btn-sm' onClick={HandlesOnSubmit}>Submit</button>
+        <button className='btn btn-primary me-4 btn-sm' onClick={HandlesOnSubmit}>Submit</button>
     </div>
     </>
   )
