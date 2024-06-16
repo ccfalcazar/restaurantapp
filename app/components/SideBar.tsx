@@ -12,7 +12,6 @@ const SideBar = () => {
         price: 0,
         stock: 0
     }
-    const [Count, setCount] = useState(0);
     const [ListOptions, SetOptions] = useState([Options]);
     const [Category, setCategory] = useState('');
     const [Name, setName] = useState('');
@@ -21,12 +20,10 @@ const SideBar = () => {
     const [ListPrice, setPrice] = useState([0]);
     const [ListStocks, setStock] = useState([0]);
 
-    useEffect(AddOptions,[Count]);
-
     function AddOptions()
-    {        
+    {    
         const temp = {
-            id: Count,
+            id: 0,
             name: 'default',
             cost: 0,
             price: 0,
@@ -47,38 +44,38 @@ const SideBar = () => {
 
     function OnChangeVariation(e:any)
     {
-        setVariations([ListVarName[Count], e.target.value]);
+        //setVariations([ListVarName[Count], e.target.value]);
     }
     function OnChangeCost(e:any)
     {
-        setCost([ListCost[Count], e.target.value]);
+        //setCost([ListCost[Count], e.target.value]);
     }
     function OnChangePrice(e:any)
     {
         const temp = {} as any;
         temp[e.target.id] = e.target.value;
-        setPrice([ListPrice[Count], e.target.value]);
+        //setPrice([ListPrice[Count], e.target.value]);
     }
     function OnChangeStock(e:any)
     {
         const temp = {} as any;
         temp[e.target.id] = e.target.value;
-        setStock([ListStocks[Count], e.target.value]);
-    }
-
-    function AddVariation(){
-        //setCount(Count+1);
+        //setStock([ListStocks[Count], e.target.value]);
     }
 
     function RemoveDiv(e:any)
     {
-        setCount(prevState=>prevState-1);
+        const ElementId = e.target.id;
+        console.log('id'+ElementId);
+        const Variants = ListOptions.filter(Opt => Opt.id !== ElementId);
+        console.log(Variants);
+        SetOptions(Variants);
         //const id = e.target.id;        
     }
 
     const HandlesOnSubmit = async() =>
     {
-        alert(ListOptions[1].id);
+        ListOptions.map((option)=>{console.log(option.id)});
         //const db = getDatabase(app);
         //const path = 'menuitems/'+Category+'/'+Name+'/';
         //push(ref(db,path),{
@@ -102,18 +99,16 @@ const SideBar = () => {
             <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' onChange={HandlesNameOnChange}/>
             <div className='flex mt-5'>
                  <label className='my-auto me-1'>Variations</label>
-                 <button className='btn btn-sm border-0 btn-outline btn-success' onClick={()=>{console.log('Count:'+Count);setCount(prev=>prev+1)}}>
+                 <button className='btn btn-sm border-0 btn-outline btn-success' onClick={AddOptions}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024"><path fill="currentColor" d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"></path></svg>
                  </button>
             </div>
             <div className=''>
                     {
                         ListOptions.map((options,index)=>{
+                            options.id = index;
                             return (
-                                <>
-                                {console.log('index:'+index)}
                                 <Variation key={index} index={index} HandlesVariationOnChange={OnChangeVariation} HandlesCostOnChange={OnChangeCost} HandlesPriceOnChange={OnChangePrice} HandlesStockOnChange={OnChangeStock} RemoveDiv={RemoveDiv} />
-                                </>
                             )})                 
                     }
                  </div>
