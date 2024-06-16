@@ -5,13 +5,35 @@ import Variation from './Variation';
 
 const SideBar = () => {
 
-    const [Count, setCount] = useState(1);
+    const Options = {
+        id: 0,
+        name: 'default',
+        cost: 0,
+        price: 0,
+        stock: 0
+    }
+    const [Count, setCount] = useState(0);
+    const [ListOptions, SetOptions] = useState([Options]);
     const [Category, setCategory] = useState('');
     const [Name, setName] = useState('');
-    const [ListVariation, setVariations] = useState(['default']);
+    const [ListVarName, setVariations] = useState(['default']);
     const [ListCost, setCost] = useState([0]);
     const [ListPrice, setPrice] = useState([0]);
     const [ListStocks, setStock] = useState([0]);
+
+    useEffect(AddOptions,[Count]);
+
+    function AddOptions()
+    {        
+        const temp = {
+            id: Count,
+            name: 'default',
+            cost: 0,
+            price: 0,
+            stock: 0
+        }
+        SetOptions([...ListOptions,temp]);
+    }
 
     function HandlesCategoryOnChange(e:any)
     {
@@ -25,7 +47,7 @@ const SideBar = () => {
 
     function OnChangeVariation(e:any)
     {
-        setVariations([ListVariation[Count], e.target.value]);
+        setVariations([ListVarName[Count], e.target.value]);
     }
     function OnChangeCost(e:any)
     {
@@ -45,31 +67,18 @@ const SideBar = () => {
     }
 
     function AddVariation(){
-        setCount(Count + 1);
+        //setCount(Count+1);
     }
 
     function RemoveDiv(e:any)
     {
-        Count -1;
-        const id = e.target.id;
-        let Element = document.getElementById('div'+e.target.id);
-        Element?.remove();
-        Element = document.getElementById('name'+id);
-        Element?.remove();
-        Element = document.getElementById('cost'+id);
-        Element?.remove();
-        Element = document.getElementById('price'+id);
-        Element?.remove();
-        Element = document.getElementById('stock'+id);
-        Element?.remove();
-        Element = document.getElementById(id);
-        Element?.remove();
-        
+        setCount(prevState=>prevState-1);
+        //const id = e.target.id;        
     }
 
     const HandlesOnSubmit = async() =>
     {
-        alert(ListVariation[0]);
+        alert(ListOptions[1].id);
         //const db = getDatabase(app);
         //const path = 'menuitems/'+Category+'/'+Name+'/';
         //push(ref(db,path),{
@@ -93,16 +102,19 @@ const SideBar = () => {
             <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' onChange={HandlesNameOnChange}/>
             <div className='flex mt-5'>
                  <label className='my-auto me-1'>Variations</label>
-                 <button className='btn btn-sm border-0 btn-outline btn-success' onClick={AddVariation}>
+                 <button className='btn btn-sm border-0 btn-outline btn-success' onClick={()=>{console.log('Count:'+Count);setCount(prev=>prev+1)}}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 1024 1024"><path fill="currentColor" d="M480 480V128a32 32 0 0 1 64 0v352h352a32 32 0 1 1 0 64H544v352a32 32 0 1 1-64 0V544H128a32 32 0 0 1 0-64z"></path></svg>
                  </button>
             </div>
             <div className=''>
                     {
-                        Array.from(Array(Count)).map((arr,index)=>{
+                        ListOptions.map((options,index)=>{
                             return (
-                            <Variation key={index} index={index} HandlesVariationOnChange={OnChangeVariation} HandlesCostOnChange={OnChangeCost} HandlesPriceOnChange={OnChangePrice} HandlesStockOnChange={OnChangeStock} RemoveDiv={RemoveDiv} />
-                            )})                    
+                                <>
+                                {console.log('index:'+index)}
+                                <Variation key={index} index={index} HandlesVariationOnChange={OnChangeVariation} HandlesCostOnChange={OnChangeCost} HandlesPriceOnChange={OnChangePrice} HandlesStockOnChange={OnChangeStock} RemoveDiv={RemoveDiv} />
+                                </>
+                            )})                 
                     }
                  </div>
 
