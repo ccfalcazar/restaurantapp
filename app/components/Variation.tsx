@@ -30,7 +30,7 @@ const Variation = ({index,Name,Cost,Price,Stocks,HandlesVariationOnChange,Handle
       </label>
       <label className='input input-sm input-bordered w-full gap-2 flex my-2'>
         Stocks:
-        <input id={'stock-'+index} className='grow' value={Stocks} placeholder='0' onChange={HandlesStockOnChange}/>
+        <input id={'stock-'+index} type='number' className='grow' value={Stocks} placeholder='0' onChange={HandlesStockOnChange}/>
       </label>
     <button id={index.toString()} className='btn btn-outline btn-error btn-sm mt-1 size-full' onClick={RemoveDiv}>Remove</button>
     </div>

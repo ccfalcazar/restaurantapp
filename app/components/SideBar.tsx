@@ -7,7 +7,7 @@ const SideBar = () => {
 
     const Options = {
         id: 0,
-        name: 'default',
+        name: '',
         cost: 0,
         price: 0,
         stock: 0
@@ -15,11 +15,13 @@ const SideBar = () => {
     const [ListOptions, setOptions] = useState([Options]);
     const [Category, setCategory] = useState('');
     const [Name, setName] = useState('');
+    const [CategoryCSS, setCategoryCSS] = useState('input input-sm input-bordered');
+    const [NameCSS, setNameCSS] = useState('input input-sm input-bordered');
     function AddOptions()
     {    
         const temp = {
             id: 0,
-            name: 'default',
+            name: '',
             cost: 0,
             price: 0,
             stock: 0
@@ -94,16 +96,40 @@ const SideBar = () => {
 
     const HandlesOnSubmit = async() =>
     {
-        const db = getDatabase(app);
-        const path = 'menuitems/'+Category+'/'+Name+'/';
-        ListOptions.map((option)=>{
-            set(ref(db,path+option.name),{
-                cost: option.cost,
-                price: option.price,
-                stocks: option.stock
+        function isInputNull()
+        {
+            const InitializeCSS = 'input input-sm input-bordered';
+            const ErrorCSS = 'input input-sm input-bordered input-error';
+            setCategoryCSS(Category==''?ErrorCSS:InitializeCSS);
+            setNameCSS(Name==''?ErrorCSS:InitializeCSS);
+            return (Category != '' && Name !=''?true:false)
+        }
+
+        if(isInputNull())
+        {
+            const db = getDatabase(app);
+            const path = 'menuitems/'+Category+'/'+Name+'/';
+            ListOptions.map((option)=>{
+                set(ref(db,path+option.name),{
+                    cost: option.cost,
+                    price: option.price,
+                    stocks: option.stock
+                });
             });
-        });
-        
+            ClearFields();
+        }
+    }
+
+    function ClearFields()
+    {
+        setCategory('');
+        setName('');
+        let Variants = ListOptions.filter(Opt => Opt.id == 0);
+        Variants[0].name = '';
+        Variants[0].cost = 0;
+        Variants[0].price = 0;
+        Variants[0].stock = 0;
+        setOptions(Variants); 
     }
 
   return (
@@ -115,11 +141,11 @@ const SideBar = () => {
             <div className='label'>
                 <span className="label-text text-sm">Category</span>
             </div>
-            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' onChange={HandlesCategoryOnChange}/>
+            <input type='Text' className={CategoryCSS} value={Category} placeholder='Type Here' onChange={HandlesCategoryOnChange}/>
             <div className='label'>
                 <span className="label-text text-sm">Name</span>
             </div>
-            <input type='Text' className='input input-sm input-bordered' placeholder='Type Here' onChange={HandlesNameOnChange}/>
+            <input type='Text' className={NameCSS} value={Name} placeholder='Type Here' onChange={HandlesNameOnChange}/>
             <div className='flex mt-5'>
                  <label className='my-auto me-1'>Variations</label>
                  <button className='btn btn-sm border-0 btn-outline btn-success' onClick={AddOptions}>
