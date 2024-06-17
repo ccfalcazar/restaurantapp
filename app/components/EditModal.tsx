@@ -62,7 +62,7 @@ const EditModal = ({Category,Name,Variant,Cost,Price,Stock,onChangeCost,onChange
             </div>
             <div className="modal-action">
             <label htmlFor="Edit_Modal" className="btn btn-primary" onClick={WriteData}>Submit</label>
-            <label htmlFor="Edit_Modal" className="btn" onClick={()=>{console.log('hello')}}>Cancel</label>
+            <label htmlFor="Edit_Modal" className="btn">Cancel</label>
             </div>
         </div>
         </div>
