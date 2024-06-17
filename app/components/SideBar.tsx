@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { app } from './../firebase-config'
-import { getDatabase, push, ref, set} from 'firebase/database';
+import { getDatabase, ref, set} from 'firebase/database';
 import Variation from './Variation';
 
 const SideBar = () => {
 
     const Options = {
         id: 0,
-        name: '',
+        name: 'Default',
         cost: 0,
         price: 0,
         stock: 0
@@ -17,11 +17,12 @@ const SideBar = () => {
     const [Name, setName] = useState('');
     const [CategoryCSS, setCategoryCSS] = useState('input input-sm input-bordered');
     const [NameCSS, setNameCSS] = useState('input input-sm input-bordered');
+
     function AddOptions()
     {    
         const temp = {
             id: 0,
-            name: '',
+            name: 'Default',
             cost: 0,
             price: 0,
             stock: 0
@@ -125,7 +126,7 @@ const SideBar = () => {
         setCategory('');
         setName('');
         let Variants = ListOptions.filter(Opt => Opt.id == 0);
-        Variants[0].name = '';
+        Variants[0].name = 'Default';
         Variants[0].cost = 0;
         Variants[0].price = 0;
         Variants[0].stock = 0;
