@@ -2,14 +2,20 @@ import React, { useEffect, useState } from 'react'
 import { app } from './../firebase-config'
 import { getDatabase, ref, onValue} from 'firebase/database';
 import Rows from './Rows';
-const ContentTable = () => {
+
+interface Props{
+    Refresh: number;
+    onEditClick: (event:any)=>void,
+    onDeleteClick:(event:any)=>void
+}
+
+const ContentTable = ({Refresh,onEditClick,onDeleteClick}:Props) => {
  
 const db = getDatabase(app);
 const path = 'menuitems/';
 
 const [ListRow, setRows] = useState(new Array());
-const [isLoaded, setIsLoaded] = useState(0);
-let count = 0;
+
  function ReadData()
  {  
     let databaseRef = ref(db, path);
@@ -36,16 +42,14 @@ let count = 0;
                 })
             })
         });
-        setIsLoaded(1);
-        console.log(count=count+1)
-    },{onlyOnce:true});
+    });
     return arr;
  }
- useEffect(LoadData,[isLoaded]);
  function LoadData()
  {
     setRows(ReadData);
  }
+ useEffect(LoadData,[Refresh])
  return (
     <>
     <div className='overflow-x-auto mx-3'>
@@ -82,7 +86,7 @@ let count = 0;
                 {
                     ListRow.map((row,index)=>{
                         return(
-                            <Rows key={index} Category={row.Category} Name={row.Name} Variant={row.Variant} Cost={row.Cost} Price={row.Price} Stock={row.Stock} />
+                            <Rows key={index} Category={row.Category} Name={row.Name} Variant={row.Variant} Cost={row.Cost} Price={row.Price} Stock={row.Stock} onEditClick={onEditClick} onDeleteClick={onDeleteClick}/>
                         )
                     })
                 }
