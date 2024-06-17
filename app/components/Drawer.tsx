@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import ContentTable from './ContentTable';
 import SideBar from './SideBar';
 import EditModal from './EditModal';
+import DeleteModal from './DeleteModal';
 
 const Drawer = () => {
 
@@ -11,25 +12,46 @@ const Drawer = () => {
   const [Category, setCategory] = useState('');
   const [Name, setName] = useState('');
   const [Variant, setVariant] = useState('');
+  const [Cost, setCost] = useState('');
+  const [Price, setPrice] = useState('');
+  const [Stock, setStock] = useState('');
+
+  function OnChangeCost(e:any)
+  {
+      setCost(e.target.value);
+  }
+
+  function OnChangePrice(e:any)
+  {
+      setPrice(e.target.value);
+  }
+
+  function OnChangeStock(e:any)
+  {
+      setStock(e.target.value);
+  }
   function ToggleRefresh()
   {
     setRefresh(Refresh==1?0:1);
+    console.log('Refresh');
   }
   function EditData(e:any)
   {
-     const [Button, Category, Name, Variant] = e.target.id.split('-');
+     const [Button, Category, Name, Variant,Cost,Price,Stock] = e.target.id.split('-');
      setCategory(Category);
      setName(Name);
      setVariant(Variant);
+     setCost(Cost);
+     setPrice(Price);
+     setStock(Stock);
   }
  
   function DeleteData(e:any)
   {
-     const [Button, Category, Name, Variant] = e.target.id.split('-');
+     const [Button, Category, Name,Variant] = e.target.id.split('-');
      setCategory(Category);
      setName(Name);
      setVariant(Variant);
- 
   }
 
   return (
@@ -50,7 +72,8 @@ const Drawer = () => {
                 <label htmlFor='add-item-drawer' className='btn btn-sm btn-outline drawer-button'>Add Item</label>
             </div>
           </div>
-            <EditModal Category={Category} Name={Name} Variant={Variant}/>
+            <DeleteModal Category={Category} Name={Name} Variant={Variant} />
+            <EditModal Category={Category} Name={Name} Variant={Variant} Cost={Cost} Price={Price} Stock={Stock} onChangeCost={OnChangeCost} onChangePrice={OnChangePrice} onChangeStock={OnChangeStock}/>
             <ContentTable onEditClick={EditData} onDeleteClick={DeleteData} Refresh={Refresh}/>
         </div>
         <div className='drawer-side'>

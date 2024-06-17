@@ -130,7 +130,7 @@ const SideBar = () => {
         Variants[0].cost = 0;
         Variants[0].price = 0;
         Variants[0].stock = 0;
-        setOptions(Variants); 
+        setOptions(Variants);
     }
 
   return (

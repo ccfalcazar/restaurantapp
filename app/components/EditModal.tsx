@@ -1,36 +1,31 @@
 import React, { useState } from 'react'
-import Variation from './Variation';
+import { app } from './../firebase-config'
+import { getDatabase, ref, set} from 'firebase/database';
 
 interface Props{
     Category: string,
     Name: string,
-    Variant: string
+    Variant: string,
+    Cost: string,
+    Price: string,
+    Stock: string,
+    onChangeCost: (event:any)=>void,
+    onChangePrice: (event:any)=>void,
+    onChangeStock: (event:any)=>void
 }
 
-const EditModal = ({Category,Name,Variant}:Props) => {
+const EditModal = ({Category,Name,Variant,Cost,Price,Stock,onChangeCost,onChangePrice,onChangeStock}:Props) => {
     const CSS = 'input input-sm input-bordered';
-    const [Cat, setCategory] = useState(Category);
-    const [Nam, setName] = useState(Name);
-    const [Var, setVariant] = useState(Variant);
-    const [Cost, setCost] = useState(0);
-    const [Price, setPrice] = useState(0);
-    const [Stock, setStock] = useState(0);
-
-    function OnChangeCost(e:any)
+    function WriteData()
     {
-        setCost(e.target.value);
+        const db = getDatabase(app);
+        const path = 'menuitems/'+Category+'/'+Name+'/';
+        set(ref(db,path+Variant),{
+            cost: Cost,
+            price: Price,
+            stocks: Stock
+        });
     }
-
-    function OnChangePrice(e:any)
-    {
-        setPrice(e.target.value);
-    }
-
-    function OnChangeStock(e:any)
-    {
-        setStock(e.target.value);
-    }
-
   return (
     <div>
         <input type="checkbox" id="Edit_Modal" className="modal-toggle" />
@@ -54,19 +49,19 @@ const EditModal = ({Category,Name,Variant}:Props) => {
                 <div className='label'>
                     <span className="label-text text-sm">Cost</span>
                 </div>
-                <input type='Text' className={CSS} value={Cost} placeholder='Type Here' onChange={OnChangeCost}/>
+                <input type='Text' className={CSS} value={Cost} placeholder='Type Here' onChange={onChangeCost}/>
                 <div className='label'>
                     <span className="label-text text-sm">Price</span>
                 </div>
-                <input type='Text' className={CSS} value={Price} placeholder='Type Here' onChange={OnChangePrice}/>
+                <input type='Text' className={CSS} value={Price} placeholder='Type Here' onChange={onChangePrice}/>
                 <div className='label'>
                     <span className="label-text text-sm">Stock</span>
                 </div>
-                <input type='Text' className={CSS} value={Cost} placeholder='Type Here' onChange={OnChangeStock}/>
+                <input type='Text' className={CSS} value={Stock} placeholder='Type Here' onChange={onChangeStock}/>
             </label>
             </div>
             <div className="modal-action">
-            <label htmlFor="Edit_Modal" className="btn btn-primary" onClick={(e:any)=>{console.log(e.target.id)}}>Submit</label>
+            <label htmlFor="Edit_Modal" className="btn btn-primary" onClick={WriteData}>Submit</label>
             <label htmlFor="Edit_Modal" className="btn" onClick={()=>{console.log('hello')}}>Cancel</label>
             </div>
         </div>

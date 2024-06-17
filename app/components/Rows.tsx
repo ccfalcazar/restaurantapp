@@ -19,10 +19,10 @@ const Rows = ({Category,Name,Variant,Cost,Price,Stock,onEditClick,onDeleteClick}
     <td>{Price}</td>
     <td>{Stock}</td>
     <td className="size-5">
-        <label htmlFor="Edit_Modal" className="btn btn-success btn-xs btn-outline"id={'Edit-'+Category+'-'+Name+'-'+Variant}onClick={onEditClick}>Edit</label>
+        <label htmlFor="Edit_Modal" className="btn btn-success btn-xs btn-outline"id={'Edit-'+Category+'-'+Name+'-'+Variant+'-'+Cost+'-'+Price+'-'+Stock}onClick={onEditClick}>Edit</label>
     </td>    
     <td className="size-5">
-        <label htmlFor="Delete_Modal" className="btn btn-error btn-xs btn-outline"id={'Delete-'+Category+'-'+Name+'-'+Variant}onClick={onEditClick}>Delete</label>
+        <label htmlFor="Delete_Modal" className="btn btn-error btn-xs btn-outline"id={'Delete-'+Category+'-'+Name+'-'+Variant}onClick={onDeleteClick}>Delete</label>
     </td>
     </tr>
   )
