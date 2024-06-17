@@ -33,7 +33,6 @@ const Drawer = () => {
   function ToggleRefresh()
   {
     setRefresh(Refresh==1?0:1);
-    console.log('Refresh');
   }
   function EditData(e:any)
   {
