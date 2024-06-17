@@ -1,5 +1,3 @@
-import { memo } from "react"
-
 interface Props{
     Category: string,
     Name: string,
@@ -32,4 +30,4 @@ const Rows = ({Category,Name,Variant,Cost,Price,Stock}:Props) => {
   )
 }
 
-export default memo(Rows)
+export default Rows

@@ -9,10 +9,11 @@ const path = 'menuitems/';
 
 const [ListRow, setRows] = useState(new Array());
 const [isLoaded, setIsLoaded] = useState(0);
-var arr = new Array();
+let count = 0;
  function ReadData()
  {  
     let databaseRef = ref(db, path);
+    let arr = new Array();
     onValue(databaseRef, (record)=>{
         record.forEach((child)=>{
             let CategoryRef = ref(db, path + child.key + '/');
@@ -31,18 +32,22 @@ var arr = new Array();
                             }
                             arr = [...arr, temp];
                         })
-                        setRows (arr);
                     })
                 })
             })
-        })
-        console.log(ListRow);
-    });
+        });
+        setIsLoaded(1);
+        console.log(count=count+1)
+    },{onlyOnce:true});
+    return arr;
  }
- 
+ useEffect(LoadData,[isLoaded]);
+ function LoadData()
+ {
+    setRows(ReadData);
+ }
  return (
     <>
-    <button className='btn btn-primary' onClick={ReadData}>Load Data</button>
     <div className='overflow-x-auto mx-3'>
         <table className='table table-zebra text-center'>
             <thead className='bg-primary text-primary-content'>
